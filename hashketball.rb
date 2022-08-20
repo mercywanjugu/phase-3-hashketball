@@ -127,3 +127,50 @@ def game_hash
 end
 
 # Write code here
+def players
+  {
+    home:game_hash[:home][:players].map{|player|player[:player_name]},
+    away:game_hash[:away][:players].map{|player|player[:player_name]}
+  }
+end
+
+def player_stats player_name
+  is_home=(players[:home].include?(player_name))? (:home):(:away)
+
+  game_hash[is_home][:players].find{|player|player[:player_name]==player_name}
+end
+
+def num_points_scored player_name
+  player_stats(player_name)[:points]
+end
+
+def shoe_size player_name
+  player_stats(player_name)[:shoe]
+end
+
+def team_colors team_name
+  if team_name=="Brooklyn Nets"
+    game_hash[:home][:colors]
+  else
+    game_hash[:away][:colors]
+  end
+end
+
+def team_names
+  [game_hash[:home][:team_name],game_hash[:away][:team_name]]
+end
+
+def player_numbers team_name
+  if team_name=="Brooklyn Nets"
+    game_hash[:home][:players].map {|player| player[:number]}
+  else
+      game_hash[:away][:players].map {|player| player[:number]}
+  end
+end
+ 
+def big_shoe_rebounds
+  all_players=game_hash[:home][:players]+game_hash[:away][:players]
+  all_players.sort_by! {|player| player[:shoe]}
+  all_players[-1][:rebounds]
+end
+pp big_shoe_rebounds
